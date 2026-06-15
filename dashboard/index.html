@@ -308,12 +308,38 @@ td{padding:10px 14px;font-size:13px;vertical-align:middle;}
     </div>
   </section>
 
-  <section>
+  <section id="repBreakdownSection">
     <div class="section-head">
       <h2>Rep Breakdown</h2>
       <span class="section-subtitle">Top 5 products per rep — trailing 90 days</span>
     </div>
     <div class="rep-grid" id="repCards"></div>
+  </section>
+
+  <section style="margin-top:40px;">
+    <div class="section-head">
+      <h2>Active Agreements</h2>
+      <span class="section-subtitle" id="activeAgrCount">Loading…</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Rep</th>
+            <th class="r">Target Units</th>
+            <th class="r">Agreed Price</th>
+            <th class="r">T3 Price</th>
+            <th>Rebate</th>
+            <th>Period</th>
+          </tr>
+        </thead>
+        <tbody id="activeAgrBody">
+          <tr><td colspan="8" class="agr-empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
 </div>
@@ -337,7 +363,13 @@ function olyTheme(t, btn) {
 const T3_DATA    = [{"vol_key": "Decor 20L", "t3_threshold_total": 18800, "t3_unit_price_avg": 248.83, "season_factor": 0.883, "t3_adjusted": 16600, "peak_t3": 24572, "current_volume": 11495, "pct_to_t3": 61.1, "pct_to_t3_adj": 69.2, "gap_units": 5105, "blended_price": 313.86, "blended_vs_t3": 65.03, "snapshot_date": "2026-06-13"}, {"vol_key": "Decor 5L", "t3_threshold_total": 2500, "t3_unit_price_avg": 78.16, "season_factor": 0.883, "t3_adjusted": 2208, "peak_t3": 3268, "current_volume": 2016, "pct_to_t3": 80.6, "pct_to_t3_adj": 91.3, "gap_units": 192, "blended_price": 108.88, "blended_vs_t3": 30.72, "snapshot_date": "2026-06-13"}, {"vol_key": "High Gloss 1L", "t3_threshold_total": 20000, "t3_unit_price_avg": 62.0, "season_factor": 0.883, "t3_adjusted": 17660, "peak_t3": 26140, "current_volume": 22759, "pct_to_t3": 113.8, "pct_to_t3_adj": 128.9, "gap_units": -5099, "blended_price": 74.16, "blended_vs_t3": 12.16, "snapshot_date": "2026-06-13"}, {"vol_key": "High Gloss 5L", "t3_threshold_total": 21000, "t3_unit_price_avg": 237.14, "season_factor": 0.883, "t3_adjusted": 18543, "peak_t3": 27447, "current_volume": 20087, "pct_to_t3": 95.7, "pct_to_t3_adj": 108.3, "gap_units": -1544, "blended_price": 253.38, "blended_vs_t3": 16.24, "snapshot_date": "2026-06-13"}, {"vol_key": "QD Enamel 1L", "t3_threshold_total": 10000, "t3_unit_price_avg": 62.0, "season_factor": 0.883, "t3_adjusted": 8830, "peak_t3": 13070, "current_volume": 11423, "pct_to_t3": 114.2, "pct_to_t3_adj": 129.4, "gap_units": -2593, "blended_price": 84.49, "blended_vs_t3": 22.49, "snapshot_date": "2026-06-13"}, {"vol_key": "QD Enamel 5L", "t3_threshold_total": 15500, "t3_unit_price_avg": 240.0, "season_factor": 0.883, "t3_adjusted": 13686, "peak_t3": 20258, "current_volume": 17155, "pct_to_t3": 110.7, "pct_to_t3_adj": 125.3, "gap_units": -3469, "blended_price": 294.56, "blended_vs_t3": 54.56, "snapshot_date": "2026-06-13"}, {"vol_key": "Roof 20L", "t3_threshold_total": 2100, "t3_unit_price_avg": 475.0, "season_factor": 0.883, "t3_adjusted": 1854, "peak_t3": 2745, "current_volume": 1176, "pct_to_t3": 56.0, "pct_to_t3_adj": 63.4, "gap_units": 678, "blended_price": 562.37, "blended_vs_t3": 87.37, "snapshot_date": "2026-06-13"}, {"vol_key": "Roof 5L", "t3_threshold_total": 1200, "t3_unit_price_avg": 132.0, "season_factor": 0.883, "t3_adjusted": 1060, "peak_t3": 1568, "current_volume": 701, "pct_to_t3": 58.4, "pct_to_t3_adj": 66.1, "gap_units": 359, "blended_price": 173.82, "blended_vs_t3": 41.82, "snapshot_date": "2026-06-13"}, {"vol_key": "Thinner 5L", "t3_threshold_total": 6800, "t3_unit_price_avg": 120.0, "season_factor": 0.883, "t3_adjusted": 6004, "peak_t3": 8888, "current_volume": 7730, "pct_to_t3": 113.7, "pct_to_t3_adj": 128.7, "gap_units": -1726, "blended_price": 139.82, "blended_vs_t3": 19.82, "snapshot_date": "2026-06-13"}, {"vol_key": "Thinner 750ml", "t3_threshold_total": 9000, "t3_unit_price_avg": 220.0, "season_factor": 0.883, "t3_adjusted": 7947, "peak_t3": 11763, "current_volume": 1230, "pct_to_t3": 13.7, "pct_to_t3_adj": 15.5, "gap_units": 6717, "blended_price": 270.65, "blended_vs_t3": 50.65, "snapshot_date": "2026-06-13"}, {"vol_key": "Varnish 1L", "t3_threshold_total": 13900, "t3_unit_price_avg": 75.91, "season_factor": 0.883, "t3_adjusted": 12274, "peak_t3": 18167, "current_volume": 11311, "pct_to_t3": 81.4, "pct_to_t3_adj": 92.2, "gap_units": 963, "blended_price": 91.63, "blended_vs_t3": 15.72, "snapshot_date": "2026-06-13"}, {"vol_key": "Varnish 5L", "t3_threshold_total": 5100, "t3_unit_price_avg": 253.29, "season_factor": 0.883, "t3_adjusted": 4503, "peak_t3": 6666, "current_volume": 3007, "pct_to_t3": 59.0, "pct_to_t3_adj": 66.8, "gap_units": 1496, "blended_price": 305.98, "blended_vs_t3": 52.69, "snapshot_date": "2026-06-13"}];
 const REP_DATA   = {"AC": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 1734, "rep_pct_of_t3": 9.2, "customer_count": 16, "blended_price": 375.74}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 585, "rep_pct_of_t3": 23.4, "customer_count": 10, "blended_price": 109.27}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 3536, "rep_pct_of_t3": 17.7, "customer_count": 22, "blended_price": 76.58}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 3554, "rep_pct_of_t3": 16.9, "customer_count": 23, "blended_price": 268.48}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 1049, "rep_pct_of_t3": 10.5, "customer_count": 12, "blended_price": 82.45}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 2778, "rep_pct_of_t3": 17.9, "customer_count": 12, "blended_price": 297.02}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 166, "rep_pct_of_t3": 7.9, "customer_count": 5, "blended_price": 519.9}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 83, "rep_pct_of_t3": 6.9, "customer_count": 5, "blended_price": 153.11}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 238, "rep_pct_of_t3": 3.5, "customer_count": 3, "blended_price": 145.0}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 35, "rep_pct_of_t3": 0.4, "customer_count": 3, "blended_price": 210.57}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 1072, "rep_pct_of_t3": 7.7, "customer_count": 18, "blended_price": 100.09}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 279, "rep_pct_of_t3": 5.5, "customer_count": 14, "blended_price": 322.21}}, "AP": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 1558, "rep_pct_of_t3": 8.3, "customer_count": 21, "blended_price": 303.37}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 92, "rep_pct_of_t3": 3.7, "customer_count": 5, "blended_price": 90.93}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 1859, "rep_pct_of_t3": 9.3, "customer_count": 26, "blended_price": 81.23}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 1257, "rep_pct_of_t3": 6.0, "customer_count": 26, "blended_price": 282.73}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 701, "rep_pct_of_t3": 7.0, "customer_count": 16, "blended_price": 92.16}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 1184, "rep_pct_of_t3": 7.6, "customer_count": 22, "blended_price": 312.11}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 213, "rep_pct_of_t3": 10.1, "customer_count": 8, "blended_price": 599.12}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 97, "rep_pct_of_t3": 8.1, "customer_count": 3, "blended_price": 178.05}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 1219, "rep_pct_of_t3": 17.9, "customer_count": 21, "blended_price": 138.64}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 240, "rep_pct_of_t3": 2.7, "customer_count": 21, "blended_price": 277.78}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 841, "rep_pct_of_t3": 6.1, "customer_count": 21, "blended_price": 98.19}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 159, "rep_pct_of_t3": 3.1, "customer_count": 8, "blended_price": 279.26}}, "BM": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 33, "rep_pct_of_t3": 0.2, "customer_count": 2, "blended_price": 344.15}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 22, "rep_pct_of_t3": 0.9, "customer_count": 2, "blended_price": 91.63}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 36, "rep_pct_of_t3": 0.2, "customer_count": 1, "blended_price": 79.05}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 28, "rep_pct_of_t3": 0.1, "customer_count": 1, "blended_price": 252.02}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 22, "rep_pct_of_t3": 0.2, "customer_count": 2, "blended_price": 77.64}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 16, "rep_pct_of_t3": 0.1, "customer_count": 2, "blended_price": 332.5}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 43, "rep_pct_of_t3": 0.3, "customer_count": 2, "blended_price": 106.26}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 23, "rep_pct_of_t3": 0.5, "customer_count": 1, "blended_price": 364.91}}, "BV": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 4113, "rep_pct_of_t3": 21.9, "customer_count": 23, "blended_price": 278.04}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 225, "rep_pct_of_t3": 9.0, "customer_count": 10, "blended_price": 94.29}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 13122, "rep_pct_of_t3": 65.6, "customer_count": 37, "blended_price": 71.17}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 10884, "rep_pct_of_t3": 51.8, "customer_count": 41, "blended_price": 237.94}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 4598, "rep_pct_of_t3": 46.0, "customer_count": 36, "blended_price": 81.56}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 6638, "rep_pct_of_t3": 42.8, "customer_count": 38, "blended_price": 299.1}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 473, "rep_pct_of_t3": 22.5, "customer_count": 19, "blended_price": 578.61}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 319, "rep_pct_of_t3": 26.6, "customer_count": 12, "blended_price": 183.7}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 1911, "rep_pct_of_t3": 28.1, "customer_count": 17, "blended_price": 142.66}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 327, "rep_pct_of_t3": 3.6, "customer_count": 22, "blended_price": 272.55}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 6499, "rep_pct_of_t3": 46.8, "customer_count": 35, "blended_price": 87.93}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 1764, "rep_pct_of_t3": 34.6, "customer_count": 23, "blended_price": 304.84}}, "NP": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 4057, "rep_pct_of_t3": 21.6, "customer_count": 29, "blended_price": 327.51}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 1092, "rep_pct_of_t3": 43.7, "customer_count": 18, "blended_price": 113.53}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 4206, "rep_pct_of_t3": 21.0, "customer_count": 44, "blended_price": 78.3}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 4364, "rep_pct_of_t3": 20.8, "customer_count": 47, "blended_price": 271.15}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 5053, "rep_pct_of_t3": 50.5, "customer_count": 36, "blended_price": 86.55}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 6539, "rep_pct_of_t3": 42.2, "customer_count": 36, "blended_price": 285.63}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 324, "rep_pct_of_t3": 15.4, "customer_count": 12, "blended_price": 536.27}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 202, "rep_pct_of_t3": 16.8, "customer_count": 8, "blended_price": 164.69}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 4362, "rep_pct_of_t3": 64.1, "customer_count": 22, "blended_price": 138.62}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 628, "rep_pct_of_t3": 7.0, "customer_count": 26, "blended_price": 270.29}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 2856, "rep_pct_of_t3": 20.5, "customer_count": 34, "blended_price": 94.74}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 782, "rep_pct_of_t3": 15.3, "customer_count": 21, "blended_price": 306.45}}};
 const REP_NAMES  = {"AC": "Aboo Cassim", "AP": "Amit Patel", "BM": "Byron Minnie", "BV": "Bhadresh Vallabh", "NP": "Nikhil Panchal"};
-const AGREEMENTS = {};  // {rep_code: {vol_key: [{customer_name,…}]}}
+const AGREEMENTS = {};  // populated from Supabase on load
+
+const SUPABASE_URL = 'https://bpblxplotublqsecdkcb.supabase.co';
+const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwYmx4cGxvdHVibHFzZWNka2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyODg3NzcsImV4cCI6MjA5NTg2NDc3N30.AOQyXbs95w3z5IGlwEoBsJBBvMxdkJEkmHx73ebswpk';
+
+// URL param: which rep is this page locked to (set when embedded in a rep KPI dashboard)
+const _urlRep = new URLSearchParams(location.search).get('rep') || null;
 
 let currentRep = 'ALL';
 
@@ -523,6 +555,92 @@ function renderRepCards() {
 
 renderTable();
 renderRepCards();
+
+// ── Rep-mode: lock to a single rep when ?rep=XX is set ──────────────────────
+if (_urlRep && REP_DATA[_urlRep]) {
+  // Hide all rep buttons except ALL and this rep
+  document.querySelectorAll('.rep-btn').forEach(b => {
+    if (b.dataset.rep !== 'ALL' && b.dataset.rep !== _urlRep) b.style.display = 'none';
+  });
+  // Hide the full Rep Breakdown section (all reps — irrelevant in single-rep view)
+  document.getElementById('repBreakdownSection').style.display = 'none';
+  // Auto-select this rep
+  filterRep(_urlRep);
+}
+
+// ── Active Agreements (live from Supabase) ───────────────────────────────────
+const T3_MAP_AGR = {};
+T3_DATA.forEach(r => { T3_MAP_AGR[r.vol_key] = r.t3_unit_price_avg; });
+
+function fmtDateAgr(s) {
+  if (!s) return '—';
+  const d = new Date(s + 'T12:00:00');
+  return d.toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'});
+}
+
+async function loadActiveAgreements() {
+  try {
+    let url = `${SUPABASE_URL}/rest/v1/vd_rebate_agreements?status=eq.active&order=created_at.desc`;
+    if (_urlRep) url += `&rep_code=eq.${encodeURIComponent(_urlRep)}`;
+    const res  = await fetch(url, { headers: { apikey: ANON_KEY, Authorization: 'Bearer ' + ANON_KEY } });
+    const rows = await res.json();
+    if (!Array.isArray(rows)) throw new Error(rows?.message || 'Bad response');
+
+    // Populate AGREEMENTS map so per-rep filter panel also works
+    rows.forEach(r => {
+      if (!AGREEMENTS[r.rep_code]) AGREEMENTS[r.rep_code] = {};
+      if (!AGREEMENTS[r.rep_code][r.vol_key]) AGREEMENTS[r.rep_code][r.vol_key] = [];
+      AGREEMENTS[r.rep_code][r.vol_key].push({
+        customer_name: r.customer_name || `ID ${r.customer_id}`,
+        account_no:    r.account_no    || '',
+        target_volume: r.target_volume,
+        agreed_price:  r.agreed_price,
+        rebate_amount: r.rebate_amount,
+        rebate_type:   r.rebate_type,
+        start_date:    r.start_date,
+        end_date:      r.end_date,
+      });
+    });
+    // Refresh table so agr badges appear
+    if (currentRep !== 'ALL') renderTable();
+
+    document.getElementById('activeAgrCount').textContent = rows.length
+      ? `${rows.length} active` : 'none on file';
+
+    if (!rows.length) {
+      document.getElementById('activeAgrBody').innerHTML =
+        '<tr><td colspan="8" class="agr-empty">No active agreements yet.</td></tr>';
+      return;
+    }
+
+    document.getElementById('activeAgrBody').innerHTML = rows.map(r => {
+      const t3p   = T3_MAP_AGR[r.vol_key];
+      const t3Html = t3p != null ? 'R' + (+t3p).toFixed(2) : '<span class="muted">—</span>';
+      const rebate = r.rebate_amount != null
+        ? (r.rebate_type === 'per_unit' ? `R${(+r.rebate_amount).toFixed(2)}/unit` : `R${(+r.rebate_amount).toFixed(2)} fixed`)
+        : '—';
+      return `<tr>
+        <td>
+          <div style="font-weight:600">${escHtml(r.customer_name || '—')}</div>
+          <div class="muted" style="font-size:11px">${escHtml(r.account_no || '')}</div>
+        </td>
+        <td>${escHtml(r.vol_key)}</td>
+        <td><strong>${escHtml(r.rep_code)}</strong></td>
+        <td class="td-num">${r.target_volume != null ? (+r.target_volume).toLocaleString('en-ZA') : '—'}</td>
+        <td class="td-num">R${(+r.agreed_price).toFixed(2)}</td>
+        <td class="td-num">${t3Html}</td>
+        <td>${escHtml(rebate)}</td>
+        <td><span class="muted" style="font-size:12px">${fmtDateAgr(r.start_date)} → ${fmtDateAgr(r.end_date)}</span></td>
+      </tr>`;
+    }).join('');
+  } catch(err) {
+    document.getElementById('activeAgrBody').innerHTML =
+      `<tr><td colspan="8" class="agr-empty">Could not load agreements: ${escHtml(String(err))}</td></tr>`;
+    document.getElementById('activeAgrCount').textContent = 'error';
+  }
+}
+
+loadActiveAgreements();
 </script>
 </body>
 </html>
