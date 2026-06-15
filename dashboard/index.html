@@ -564,6 +564,8 @@ if (_urlRep && REP_DATA[_urlRep]) {
   });
   // Hide the full Rep Breakdown section (all reps — irrelevant in single-rep view)
   document.getElementById('repBreakdownSection').style.display = 'none';
+  // Hide the inline agrPanel (below the product table) — the bottom Active Agreements section covers it
+  document.getElementById('agrPanel').style.display = 'none';
   // Auto-select this rep
   filterRep(_urlRep);
 }
