@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VD Rebate Dashboard — Olympic Paints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>var t=localStorage.getItem('oly-theme');if(t)document.documentElement.className=t;</script>
+<style>
+:root {
+  --_y50:#FEF9E0;--_y100:#FDF0A0;--_y200:#FAE04D;
+  --_y400:#F5C400;--_y600:#D4A800;--_y800:#A88000;--_y900:#6A5000;
+  --_n50:#E8EFF8;--_n100:#B8CCE8;--_n300:#6B9ED0;
+  --_n500:#2D6BA8;--_n700:#1A3D6E;--_n900:#0D2040;--_n950:#071022;
+  --_g0:#FFFFFF;--_g50:#F7F6F3;--_g100:#E8E7E2;--_g200:#C8C7C0;
+  --_g400:#949390;--_g600:#5C5B58;--_g800:#2E2E2C;
+  --_g900:#1A1A18;--_g950:#0D0D0B;
+  --_teal:#2D8C7A;--_teal-light:#C8EDE7;--_teal-dark:#1a5c50;
+  --_coral:#E86060;--_coral-light:#FDDCDC;
+  --_ink:#5C6B7A;
+  --font-display:'Barlow Condensed',sans-serif;
+  --font-body:'Barlow',sans-serif;
+  --r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:16px;--r-pill:50px;
+}
+.theme-light{color-scheme:light;
+  --color-surface-page:var(--_g50);--color-surface-base:var(--_g0);
+  --color-surface-elevated:var(--_g0);--color-surface-sunken:var(--_g100);
+  --color-surface-overlay:rgba(0,0,0,0.04);
+  --color-surface-brand:var(--_y400);--color-surface-secondary:var(--_n700);
+  --color-text-primary:var(--_g950);--color-text-secondary:var(--_g600);
+  --color-text-tertiary:var(--_g400);--color-text-on-brand:var(--_g950);
+  --color-text-on-navy:var(--_g0);
+  --color-brand-primary:var(--_y400);--color-brand-hover:var(--_y600);
+  --color-border-subtle:var(--_g100);--color-border-default:var(--_g200);
+  --color-border-strong:var(--_g400);--color-border-brand:var(--_y400);
+  --color-success-bg:#EDF7F5;--color-success-fg:var(--_teal-dark);--color-success-bd:var(--_teal);
+  --color-warning-bg:var(--_y50);--color-warning-fg:var(--_y900);--color-warning-bd:var(--_y600);
+  --color-danger-bg:#FEF2F2;--color-danger-fg:#C0392B;--color-danger-bd:var(--_coral);
+  --color-info-bg:var(--_n50);--color-info-fg:var(--_n700);--color-info-bd:var(--_n500);
+  --color-neutral-bg:var(--_g100);--color-neutral-fg:var(--_g600);--color-neutral-bd:var(--_g400);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);--shadow-md:0 4px 12px rgba(0,0,0,0.08);
+}
+.theme-dark{color-scheme:dark;
+  --color-surface-page:var(--_g950);--color-surface-base:var(--_g900);
+  --color-surface-elevated:var(--_g800);--color-surface-sunken:var(--_g950);
+  --color-surface-overlay:rgba(255,255,255,0.04);
+  --color-surface-brand:var(--_y400);--color-surface-secondary:var(--_n700);
+  --color-text-primary:var(--_g100);--color-text-secondary:var(--_g400);
+  --color-text-tertiary:var(--_g600);--color-text-on-brand:var(--_g950);
+  --color-text-on-navy:var(--_g0);
+  --color-brand-primary:var(--_y400);--color-brand-hover:var(--_y200);
+  --color-border-subtle:rgba(255,255,255,0.06);--color-border-default:rgba(255,255,255,0.10);
+  --color-border-strong:rgba(255,255,255,0.20);--color-border-brand:var(--_y400);
+  --color-success-bg:rgba(45,140,122,0.12);--color-success-fg:var(--_teal-light);--color-success-bd:rgba(45,140,122,0.30);
+  --color-warning-bg:rgba(245,196,0,0.10);--color-warning-fg:var(--_y200);--color-warning-bd:rgba(245,196,0,0.25);
+  --color-danger-bg:rgba(232,96,96,0.12);--color-danger-fg:var(--_coral-light);--color-danger-bd:rgba(232,96,96,0.30);
+  --color-info-bg:rgba(26,61,110,0.30);--color-info-fg:var(--_n100);--color-info-bd:rgba(107,158,208,0.30);
+  --color-neutral-bg:rgba(255,255,255,0.05);--color-neutral-fg:var(--_g400);--color-neutral-bd:rgba(255,255,255,0.10);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.40);--shadow-md:0 4px 12px rgba(0,0,0,0.40);
+}
+.theme-brand{color-scheme:light;
+  --color-surface-page:var(--_y400);--color-surface-base:var(--_y200);
+  --color-surface-elevated:var(--_y50);--color-surface-sunken:var(--_y600);
+  --color-surface-overlay:rgba(0,0,0,0.05);
+  --color-surface-brand:var(--_y400);--color-surface-secondary:var(--_g950);
+  --color-text-primary:var(--_g950);--color-text-secondary:var(--_y900);
+  --color-text-tertiary:var(--_y800);--color-text-on-brand:var(--_g950);
+  --color-text-on-navy:var(--_g0);
+  --color-brand-primary:var(--_g950);--color-brand-hover:var(--_n700);
+  --color-border-subtle:rgba(0,0,0,0.08);--color-border-default:rgba(0,0,0,0.14);
+  --color-border-strong:rgba(0,0,0,0.25);--color-border-brand:var(--_g950);
+  --color-success-bg:rgba(45,140,122,0.12);--color-success-fg:var(--_teal-dark);--color-success-bd:var(--_teal);
+  --color-warning-bg:rgba(0,0,0,0.08);--color-warning-fg:var(--_y900);--color-warning-bd:var(--_y900);
+  --color-danger-bg:rgba(232,96,96,0.12);--color-danger-fg:#C0392B;--color-danger-bd:var(--_coral);
+  --color-info-bg:rgba(26,61,110,0.10);--color-info-fg:var(--_n900);--color-info-bd:var(--_n700);
+  --color-neutral-bg:rgba(0,0,0,0.06);--color-neutral-fg:var(--_y900);--color-neutral-bd:rgba(0,0,0,0.15);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.12);--shadow-md:0 4px 12px rgba(0,0,0,0.14);
+}
+.theme-navy{color-scheme:dark;
+  --color-surface-page:var(--_n950);--color-surface-base:var(--_n900);
+  --color-surface-elevated:var(--_n700);--color-surface-sunken:var(--_n950);
+  --color-surface-overlay:rgba(255,255,255,0.04);
+  --color-surface-brand:var(--_y400);--color-surface-secondary:var(--_n700);
+  --color-text-primary:var(--_g0);--color-text-secondary:var(--_n100);
+  --color-text-tertiary:var(--_n300);--color-text-on-brand:var(--_g950);
+  --color-text-on-navy:var(--_g0);
+  --color-brand-primary:var(--_y400);--color-brand-hover:var(--_y200);
+  --color-border-subtle:rgba(107,158,208,0.12);--color-border-default:rgba(107,158,208,0.20);
+  --color-border-strong:rgba(107,158,208,0.35);--color-border-brand:var(--_y400);
+  --color-success-bg:rgba(45,140,122,0.15);--color-success-fg:var(--_teal-light);--color-success-bd:rgba(45,140,122,0.35);
+  --color-warning-bg:rgba(245,196,0,0.12);--color-warning-fg:var(--_y200);--color-warning-bd:rgba(245,196,0,0.30);
+  --color-danger-bg:rgba(232,96,96,0.14);--color-danger-fg:var(--_coral-light);--color-danger-bd:rgba(232,96,96,0.35);
+  --color-info-bg:rgba(45,107,168,0.20);--color-info-fg:var(--_n100);--color-info-bd:rgba(107,158,208,0.35);
+  --color-neutral-bg:rgba(255,255,255,0.05);--color-neutral-fg:var(--_n300);--color-neutral-bd:rgba(255,255,255,0.12);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.50);--shadow-md:0 4px 12px rgba(0,0,0,0.50);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--color-surface-page);color:var(--color-text-primary);font-family:var(--font-body);min-height:100vh;line-height:1.5;}
+.theme-bar{display:flex;gap:4px;padding:8px 16px;background:var(--color-surface-secondary);}
+.theme-bar button{font-family:var(--font-body);font-size:12px;font-weight:500;padding:4px 12px;border-radius:var(--r-pill);border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--color-text-on-navy);cursor:pointer;transition:background .15s;}
+.theme-bar button.active,.theme-bar button:hover{background:var(--color-brand-primary);color:var(--color-text-on-brand);border-color:transparent;}
+.page-header{display:flex;align-items:center;gap:16px;padding:20px 32px;background:var(--color-surface-base);border-bottom:1px solid var(--color-border-default);}
+.logo-wrap{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+.logo-wrap img{display:block;width:100%;height:100%;object-fit:cover;}
+.header-title{flex:1;}
+.eyebrow{font-family:var(--font-display);font-weight:700;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-brand-primary);}
+.header-title h1{font-family:var(--font-display);font-weight:900;font-size:28px;text-transform:uppercase;color:var(--color-text-primary);line-height:1.1;}
+.header-meta{text-align:right;font-size:12px;color:var(--color-text-secondary);line-height:1.9;}
+.header-meta strong{color:var(--color-text-primary);}
+.page-content{max-width:1440px;margin:0 auto;padding:24px 32px 48px;}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.kpi-card{background:var(--color-surface-base);border:1px solid var(--color-border-default);border-radius:var(--r-lg);padding:20px 24px;box-shadow:var(--shadow-sm);}
+.kpi-card.success{border-color:var(--color-success-bd);background:var(--color-success-bg);}
+.kpi-card.warning{border-color:var(--color-warning-bd);background:var(--color-warning-bg);}
+.kpi-number{font-family:var(--font-display);font-weight:900;font-size:40px;color:var(--color-text-primary);line-height:1;}
+.kpi-card.success .kpi-number{color:var(--color-success-fg);}
+.kpi-card.warning .kpi-number{color:var(--color-warning-fg);}
+.kpi-label{font-family:var(--font-body);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-secondary);margin-top:4px;}
+.season-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--color-warning-bg);border:1px solid var(--color-warning-bd);border-radius:var(--r-md);padding:12px 20px;margin-bottom:24px;font-size:13px;color:var(--color-warning-fg);}
+.season-banner strong{font-weight:700;}
+.season-sep{opacity:0.4;}
+.section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
+.section-head h2{font-family:var(--font-display);font-weight:800;font-size:22px;text-transform:uppercase;color:var(--color-text-primary);}
+.section-subtitle{font-size:13px;color:var(--color-text-secondary);}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.rep-btn{font-family:var(--font-body);font-weight:500;font-size:12px;padding:6px 14px;border-radius:var(--r-pill);border:1px solid var(--color-border-default);background:var(--color-surface-elevated);color:var(--color-text-secondary);cursor:pointer;transition:all .15s;}
+.rep-btn:hover{border-color:var(--color-brand-primary);color:var(--color-text-primary);}
+.rep-btn.active{background:var(--color-brand-primary);color:var(--color-text-on-brand);border-color:var(--color-brand-primary);font-weight:600;}
+.table-wrap{background:var(--color-surface-base);border:1px solid var(--color-border-default);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:32px;}
+table{width:100%;border-collapse:collapse;}
+thead th{font-family:var(--font-display);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-secondary);background:var(--color-surface-sunken);padding:10px 14px;text-align:left;border-bottom:1px solid var(--color-border-default);white-space:nowrap;}
+thead th.r{text-align:right;}
+tbody tr{border-bottom:1px solid var(--color-border-subtle);}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:nth-child(even){background:var(--color-surface-overlay);}
+tbody tr:hover{background:var(--color-surface-elevated);}
+td{padding:10px 14px;font-size:13px;vertical-align:middle;}
+.td-key{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--color-text-primary);white-space:nowrap;}
+.td-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.td-bar{min-width:180px;}
+.bar-wrap{height:8px;background:var(--color-surface-sunken);border-radius:var(--r-pill);overflow:hidden;margin-bottom:4px;}
+.bar-fill{height:100%;border-radius:var(--r-pill);transition:width .3s ease;}
+.bar-fill.bar-success{background:var(--_teal);}
+.bar-fill.bar-warning{background:var(--_y400);}
+.bar-fill.bar-danger{background:var(--_coral);}
+.bar-fill.bar-info{background:var(--_n500);}
+.bar-fill.bar-neutral{background:var(--_ink);}
+.bar-pct{font-size:12px;font-weight:600;}
+.bar-pct.success-text{color:var(--color-success-fg);}
+.bar-pct.warning-text{color:var(--color-warning-fg);}
+.bar-pct.danger-text{color:var(--color-danger-fg);}
+.bar-pct.info-text{color:var(--color-info-fg);}
+.bar-pct.neutral-text{color:var(--color-neutral-fg);}
+.td-muted{color:var(--color-text-tertiary);text-align:right;}
+.cust-badge{display:inline-block;margin-left:6px;font-size:10px;font-weight:600;padding:1px 6px;background:var(--color-neutral-bg);color:var(--color-neutral-fg);border-radius:var(--r-pill);vertical-align:middle;}
+.agr-badge{display:inline-block;margin-left:5px;font-size:10px;font-weight:700;padding:1px 7px;background:var(--color-warning-bg);color:var(--color-warning-fg);border:1px solid var(--color-warning-bd);border-radius:var(--r-pill);vertical-align:middle;}
+/* Agreements panel */
+.agr-panel{margin-top:24px;display:none;}
+.agr-panel.show{display:block;}
+.agr-panel-head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;}
+.agr-panel-head h3{font-family:var(--font-display);font-weight:800;font-size:18px;text-transform:uppercase;color:var(--color-text-primary);}
+.agr-panel-sub{font-size:13px;color:var(--color-text-secondary);}
+.agr-empty{padding:16px;text-align:center;color:var(--color-text-tertiary);font-size:13px;}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:var(--r-pill);}
+.badge-success{background:var(--color-success-bg);color:var(--color-success-fg);border:1px solid var(--color-success-bd);}
+.badge-warning{background:var(--color-warning-bg);color:var(--color-warning-fg);border:1px solid var(--color-warning-bd);}
+.badge-danger{background:var(--color-danger-bg);color:var(--color-danger-fg);border:1px solid var(--color-danger-bd);}
+.badge-info{background:var(--color-info-bg);color:var(--color-info-fg);border:1px solid var(--color-info-bd);}
+.badge-neutral{background:var(--color-neutral-bg);color:var(--color-neutral-fg);border:1px solid var(--color-neutral-bd);}
+.pos{color:var(--color-success-fg);font-weight:600;}
+.neg{color:var(--color-danger-fg);font-weight:600;}
+.muted{color:var(--color-text-tertiary);}
+.rep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:20px;}
+.rep-card{background:var(--color-surface-base);border:1px solid var(--color-border-default);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
+.rep-card-header{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--color-surface-secondary);border-bottom:1px solid var(--color-border-default);}
+.rep-code{font-family:var(--font-display);font-weight:900;font-size:32px;color:var(--color-brand-primary);line-height:1;}
+.rep-name{font-family:var(--font-display);font-weight:700;font-size:16px;text-transform:uppercase;color:var(--color-text-on-navy);}
+.rep-total{font-size:12px;color:var(--color-text-secondary);margin-top:2px;}
+.rep-table{width:100%;}
+.rep-table th{font-family:var(--font-display);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-tertiary);padding:8px 14px;border-bottom:1px solid var(--color-border-subtle);background:var(--color-surface-sunken);}
+.rep-table th.r{text-align:right;}
+.rep-table td{padding:8px 14px;font-size:12px;}
+.rep-table tr:nth-child(even){background:var(--color-surface-overlay);}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}.page-content{padding:16px;}.page-header{padding:16px;}.rep-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){.header-meta{display:none;}}
+.vd-sub-nav{display:flex;align-items:center;background:var(--color-surface-base);border-bottom:1px solid var(--color-border-default);padding:0 16px;}
+.vd-sub-nav-brand{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-brand-primary);padding:0 16px 0 0;margin-right:8px;border-right:1px solid var(--color-border-default);line-height:40px;}
+.vd-sub-nav a{display:inline-block;padding:0 16px;line-height:40px;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--color-text-secondary);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.vd-sub-nav a:hover,.vd-sub-nav a.active{color:var(--color-text-primary);border-bottom-color:var(--color-brand-primary);}
+</style>
+</head>
+<body>
+
+<div class="theme-bar">
+  <button onclick="olyTheme('theme-light',this)">Light</button>
+  <button onclick="olyTheme('theme-dark',this)" class="active">Dark</button>
+  <button onclick="olyTheme('theme-brand',this)">Brand</button>
+  <button onclick="olyTheme('theme-navy',this)">Navy</button>
+</div>
+
+<nav class="vd-sub-nav">
+  <span class="vd-sub-nav-brand">VD Rebate</span>
+  <a href="https://olympic-paints-portal.vercel.app/d/vd-rebate" class="active">Dashboard</a>
+  <a href="https://olympic-paints-portal.vercel.app/d/vd-agreements">Agreements</a>
+</nav>
+
+<header class="page-header">
+  <div class="logo-wrap"><img src="logo.jpg" alt="Olympic Paints" width="48" height="48"></div>
+  <div class="header-title">
+    <div class="eyebrow">Olympic Paints — Enamel Range</div>
+    <h1>Volume Discount &amp; Rebate</h1>
+  </div>
+  <div class="header-meta">
+    <div>Snapshot: <strong>2026-06-13</strong></div>
+    <div>Season factor (current window): <strong>0.883&times;</strong></div>
+    <div>Peak factor (Oct–Nov–Dec): <strong>1.307&times;</strong></div>
+  </div>
+</header>
+
+<div class="page-content">
+
+  <div class="kpi-row">
+    <div class="kpi-card success">
+      <div class="kpi-number">5 / 12</div>
+      <div class="kpi-label">Products at or above adj. T3</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">110,090</div>
+      <div class="kpi-label">Total units — trailing 90 days</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">90.4%</div>
+      <div class="kpi-label">Avg % of seasonally-adjusted T3</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">5</div>
+      <div class="kpi-label">Active reps tracked</div>
+    </div>
+  </div>
+
+  <div class="season-banner">
+    <strong>Seasonality</strong>
+    <span class="season-sep">|</span>
+    <span>Current window (Mar–Jun): <strong>0.883&times;</strong> avg</span>
+    <span class="season-sep">|</span>
+    <span>T3 Adj = annual-avg threshold &times; current factor — the fair target right now</span>
+    <span class="season-sep">|</span>
+    <span>Q4 peak (Oct–Dec): <strong>1.307&times;</strong> — T3 Peak column shows what customers need in season</span>
+  </div>
+
+  <section style="margin-bottom:40px;">
+    <div class="section-head">
+      <h2>Product T3 Progress</h2>
+      <span class="section-subtitle" id="filterSubtitle">All reps — total business</span>
+    </div>
+    <div class="filter-row">
+      <button class="rep-btn active" onclick="filterRep('ALL')" data-rep="ALL">All Reps</button>
+<button class="rep-btn" onclick="filterRep('AC')" data-rep="AC">AC — Aboo Cassim (15,109)</button>
+<button class="rep-btn" onclick="filterRep('AP')" data-rep="AP">AP — Amit Patel (9,420)</button>
+<button class="rep-btn" onclick="filterRep('BM')" data-rep="BM">BM — Byron Minnie (223)</button>
+<button class="rep-btn" onclick="filterRep('BV')" data-rep="BV">BV — Bhadresh Vallabh (50,873)</button>
+<button class="rep-btn" onclick="filterRep('NP')" data-rep="NP">NP — Nikhil Panchal (34,465)</button>
+
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th class="r">Current</th>
+            <th class="r" id="t3adjHeader">T3 Adj</th>
+            <th>Progress</th>
+            <th class="r">Gap to Adj</th>
+            <th class="r">T3 Peak (Q4)</th>
+            <th class="r">Ave Price</th>
+            <th class="r">MTD Ave</th>
+            <th class="r">vs T3</th>
+          </tr>
+        </thead>
+        <tbody id="progressBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Rebate agreements panel — visible only when a rep is selected -->
+    <div class="agr-panel" id="agrPanel">
+      <div class="agr-panel-head">
+        <h3>Active Rebate Agreements</h3>
+        <span class="agr-panel-sub" id="agrPanelSub"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Product</th>
+              <th class="r">Target Units</th>
+              <th class="r">Agreed Price</th>
+              <th class="r">T3 Price</th>
+              <th>Rebate</th>
+              <th>Period</th>
+            </tr>
+          </thead>
+          <tbody id="agrBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Rep Breakdown</h2>
+      <span class="section-subtitle">Top 5 products per rep — trailing 90 days</span>
+    </div>
+    <div class="rep-grid" id="repCards"></div>
+  </section>
+
+</div>
+
+<script>
+const OLY_THEMES = ['theme-light','theme-dark','theme-brand','theme-navy'];
+function olyTheme(t, btn) {
+  document.documentElement.classList.remove(...OLY_THEMES);
+  document.documentElement.classList.add(t);
+  localStorage.setItem('oly-theme', t);
+  document.querySelectorAll('.theme-bar button').forEach(b => b.classList.toggle('active', b === btn));
+}
+(function(){
+  const s = localStorage.getItem('oly-theme') || 'theme-dark';
+  document.querySelectorAll('.theme-bar button').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(s)) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+})();
+
+const T3_DATA    = [{"vol_key": "Decor 20L", "t3_threshold_total": 18800, "t3_unit_price_avg": 248.83, "season_factor": 0.883, "t3_adjusted": 16600, "peak_t3": 24572, "current_volume": 11495, "pct_to_t3": 61.1, "pct_to_t3_adj": 69.2, "gap_units": 5105, "blended_price": 313.86, "blended_vs_t3": 65.03, "snapshot_date": "2026-06-13"}, {"vol_key": "Decor 5L", "t3_threshold_total": 2500, "t3_unit_price_avg": 78.16, "season_factor": 0.883, "t3_adjusted": 2208, "peak_t3": 3268, "current_volume": 2016, "pct_to_t3": 80.6, "pct_to_t3_adj": 91.3, "gap_units": 192, "blended_price": 108.88, "blended_vs_t3": 30.72, "snapshot_date": "2026-06-13"}, {"vol_key": "High Gloss 1L", "t3_threshold_total": 20000, "t3_unit_price_avg": 62.0, "season_factor": 0.883, "t3_adjusted": 17660, "peak_t3": 26140, "current_volume": 22759, "pct_to_t3": 113.8, "pct_to_t3_adj": 128.9, "gap_units": -5099, "blended_price": 74.16, "blended_vs_t3": 12.16, "snapshot_date": "2026-06-13"}, {"vol_key": "High Gloss 5L", "t3_threshold_total": 21000, "t3_unit_price_avg": 237.14, "season_factor": 0.883, "t3_adjusted": 18543, "peak_t3": 27447, "current_volume": 20087, "pct_to_t3": 95.7, "pct_to_t3_adj": 108.3, "gap_units": -1544, "blended_price": 253.38, "blended_vs_t3": 16.24, "snapshot_date": "2026-06-13"}, {"vol_key": "QD Enamel 1L", "t3_threshold_total": 10000, "t3_unit_price_avg": 62.0, "season_factor": 0.883, "t3_adjusted": 8830, "peak_t3": 13070, "current_volume": 11423, "pct_to_t3": 114.2, "pct_to_t3_adj": 129.4, "gap_units": -2593, "blended_price": 84.49, "blended_vs_t3": 22.49, "snapshot_date": "2026-06-13"}, {"vol_key": "QD Enamel 5L", "t3_threshold_total": 15500, "t3_unit_price_avg": 240.0, "season_factor": 0.883, "t3_adjusted": 13686, "peak_t3": 20258, "current_volume": 17155, "pct_to_t3": 110.7, "pct_to_t3_adj": 125.3, "gap_units": -3469, "blended_price": 294.56, "blended_vs_t3": 54.56, "snapshot_date": "2026-06-13"}, {"vol_key": "Roof 20L", "t3_threshold_total": 2100, "t3_unit_price_avg": 475.0, "season_factor": 0.883, "t3_adjusted": 1854, "peak_t3": 2745, "current_volume": 1176, "pct_to_t3": 56.0, "pct_to_t3_adj": 63.4, "gap_units": 678, "blended_price": 562.37, "blended_vs_t3": 87.37, "snapshot_date": "2026-06-13"}, {"vol_key": "Roof 5L", "t3_threshold_total": 1200, "t3_unit_price_avg": 132.0, "season_factor": 0.883, "t3_adjusted": 1060, "peak_t3": 1568, "current_volume": 701, "pct_to_t3": 58.4, "pct_to_t3_adj": 66.1, "gap_units": 359, "blended_price": 173.82, "blended_vs_t3": 41.82, "snapshot_date": "2026-06-13"}, {"vol_key": "Thinner 5L", "t3_threshold_total": 6800, "t3_unit_price_avg": 120.0, "season_factor": 0.883, "t3_adjusted": 6004, "peak_t3": 8888, "current_volume": 7730, "pct_to_t3": 113.7, "pct_to_t3_adj": 128.7, "gap_units": -1726, "blended_price": 139.82, "blended_vs_t3": 19.82, "snapshot_date": "2026-06-13"}, {"vol_key": "Thinner 750ml", "t3_threshold_total": 9000, "t3_unit_price_avg": 220.0, "season_factor": 0.883, "t3_adjusted": 7947, "peak_t3": 11763, "current_volume": 1230, "pct_to_t3": 13.7, "pct_to_t3_adj": 15.5, "gap_units": 6717, "blended_price": 270.65, "blended_vs_t3": 50.65, "snapshot_date": "2026-06-13"}, {"vol_key": "Varnish 1L", "t3_threshold_total": 13900, "t3_unit_price_avg": 75.91, "season_factor": 0.883, "t3_adjusted": 12274, "peak_t3": 18167, "current_volume": 11311, "pct_to_t3": 81.4, "pct_to_t3_adj": 92.2, "gap_units": 963, "blended_price": 91.63, "blended_vs_t3": 15.72, "snapshot_date": "2026-06-13"}, {"vol_key": "Varnish 5L", "t3_threshold_total": 5100, "t3_unit_price_avg": 253.29, "season_factor": 0.883, "t3_adjusted": 4503, "peak_t3": 6666, "current_volume": 3007, "pct_to_t3": 59.0, "pct_to_t3_adj": 66.8, "gap_units": 1496, "blended_price": 305.98, "blended_vs_t3": 52.69, "snapshot_date": "2026-06-13"}];
+const REP_DATA   = {"AC": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 1734, "rep_pct_of_t3": 9.2, "customer_count": 16, "blended_price": 375.74}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 585, "rep_pct_of_t3": 23.4, "customer_count": 10, "blended_price": 109.27}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 3536, "rep_pct_of_t3": 17.7, "customer_count": 22, "blended_price": 76.58}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 3554, "rep_pct_of_t3": 16.9, "customer_count": 23, "blended_price": 268.48}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 1049, "rep_pct_of_t3": 10.5, "customer_count": 12, "blended_price": 82.45}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 2778, "rep_pct_of_t3": 17.9, "customer_count": 12, "blended_price": 297.02}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 166, "rep_pct_of_t3": 7.9, "customer_count": 5, "blended_price": 519.9}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 83, "rep_pct_of_t3": 6.9, "customer_count": 5, "blended_price": 153.11}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 238, "rep_pct_of_t3": 3.5, "customer_count": 3, "blended_price": 145.0}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 35, "rep_pct_of_t3": 0.4, "customer_count": 3, "blended_price": 210.57}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 1072, "rep_pct_of_t3": 7.7, "customer_count": 18, "blended_price": 100.09}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 279, "rep_pct_of_t3": 5.5, "customer_count": 14, "blended_price": 322.21}}, "AP": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 1558, "rep_pct_of_t3": 8.3, "customer_count": 21, "blended_price": 303.37}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 92, "rep_pct_of_t3": 3.7, "customer_count": 5, "blended_price": 90.93}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 1859, "rep_pct_of_t3": 9.3, "customer_count": 26, "blended_price": 81.23}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 1257, "rep_pct_of_t3": 6.0, "customer_count": 26, "blended_price": 282.73}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 701, "rep_pct_of_t3": 7.0, "customer_count": 16, "blended_price": 92.16}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 1184, "rep_pct_of_t3": 7.6, "customer_count": 22, "blended_price": 312.11}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 213, "rep_pct_of_t3": 10.1, "customer_count": 8, "blended_price": 599.12}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 97, "rep_pct_of_t3": 8.1, "customer_count": 3, "blended_price": 178.05}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 1219, "rep_pct_of_t3": 17.9, "customer_count": 21, "blended_price": 138.64}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 240, "rep_pct_of_t3": 2.7, "customer_count": 21, "blended_price": 277.78}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 841, "rep_pct_of_t3": 6.1, "customer_count": 21, "blended_price": 98.19}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 159, "rep_pct_of_t3": 3.1, "customer_count": 8, "blended_price": 279.26}}, "BM": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 33, "rep_pct_of_t3": 0.2, "customer_count": 2, "blended_price": 344.15}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 22, "rep_pct_of_t3": 0.9, "customer_count": 2, "blended_price": 91.63}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 36, "rep_pct_of_t3": 0.2, "customer_count": 1, "blended_price": 79.05}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 28, "rep_pct_of_t3": 0.1, "customer_count": 1, "blended_price": 252.02}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 22, "rep_pct_of_t3": 0.2, "customer_count": 2, "blended_price": 77.64}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 16, "rep_pct_of_t3": 0.1, "customer_count": 2, "blended_price": 332.5}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 43, "rep_pct_of_t3": 0.3, "customer_count": 2, "blended_price": 106.26}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 23, "rep_pct_of_t3": 0.5, "customer_count": 1, "blended_price": 364.91}}, "BV": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 4113, "rep_pct_of_t3": 21.9, "customer_count": 23, "blended_price": 278.04}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 225, "rep_pct_of_t3": 9.0, "customer_count": 10, "blended_price": 94.29}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 13122, "rep_pct_of_t3": 65.6, "customer_count": 37, "blended_price": 71.17}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 10884, "rep_pct_of_t3": 51.8, "customer_count": 41, "blended_price": 237.94}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 4598, "rep_pct_of_t3": 46.0, "customer_count": 36, "blended_price": 81.56}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 6638, "rep_pct_of_t3": 42.8, "customer_count": 38, "blended_price": 299.1}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 473, "rep_pct_of_t3": 22.5, "customer_count": 19, "blended_price": 578.61}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 319, "rep_pct_of_t3": 26.6, "customer_count": 12, "blended_price": 183.7}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 1911, "rep_pct_of_t3": 28.1, "customer_count": 17, "blended_price": 142.66}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 327, "rep_pct_of_t3": 3.6, "customer_count": 22, "blended_price": 272.55}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 6499, "rep_pct_of_t3": 46.8, "customer_count": 35, "blended_price": 87.93}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 1764, "rep_pct_of_t3": 34.6, "customer_count": 23, "blended_price": 304.84}}, "NP": {"Decor 20L": {"vol_key": "Decor 20L", "rep_volume": 4057, "rep_pct_of_t3": 21.6, "customer_count": 29, "blended_price": 327.51}, "Decor 5L": {"vol_key": "Decor 5L", "rep_volume": 1092, "rep_pct_of_t3": 43.7, "customer_count": 18, "blended_price": 113.53}, "High Gloss 1L": {"vol_key": "High Gloss 1L", "rep_volume": 4206, "rep_pct_of_t3": 21.0, "customer_count": 44, "blended_price": 78.3}, "High Gloss 5L": {"vol_key": "High Gloss 5L", "rep_volume": 4364, "rep_pct_of_t3": 20.8, "customer_count": 47, "blended_price": 271.15}, "QD Enamel 1L": {"vol_key": "QD Enamel 1L", "rep_volume": 5053, "rep_pct_of_t3": 50.5, "customer_count": 36, "blended_price": 86.55}, "QD Enamel 5L": {"vol_key": "QD Enamel 5L", "rep_volume": 6539, "rep_pct_of_t3": 42.2, "customer_count": 36, "blended_price": 285.63}, "Roof 20L": {"vol_key": "Roof 20L", "rep_volume": 324, "rep_pct_of_t3": 15.4, "customer_count": 12, "blended_price": 536.27}, "Roof 5L": {"vol_key": "Roof 5L", "rep_volume": 202, "rep_pct_of_t3": 16.8, "customer_count": 8, "blended_price": 164.69}, "Thinner 5L": {"vol_key": "Thinner 5L", "rep_volume": 4362, "rep_pct_of_t3": 64.1, "customer_count": 22, "blended_price": 138.62}, "Thinner 750ml": {"vol_key": "Thinner 750ml", "rep_volume": 628, "rep_pct_of_t3": 7.0, "customer_count": 26, "blended_price": 270.29}, "Varnish 1L": {"vol_key": "Varnish 1L", "rep_volume": 2856, "rep_pct_of_t3": 20.5, "customer_count": 34, "blended_price": 94.74}, "Varnish 5L": {"vol_key": "Varnish 5L", "rep_volume": 782, "rep_pct_of_t3": 15.3, "customer_count": 21, "blended_price": 306.45}}};
+const REP_NAMES  = {"AC": "Aboo Cassim", "AP": "Amit Patel", "BM": "Byron Minnie", "BV": "Bhadresh Vallabh", "NP": "Nikhil Panchal"};
+const AGREEMENTS = {};  // {rep_code: {vol_key: [{customer_name,…}]}}
+
+let currentRep = 'ALL';
+
+function fmt(n) { return n == null ? '—' : Math.round(n).toLocaleString('en-ZA'); }
+
+function statusClass(pct) {
+  if (pct == null) return 'neutral';
+  if (pct >= 100) return 'success';
+  if (pct >= 75)  return 'warning';
+  if (pct >= 50)  return 'info';
+  return 'danger';
+}
+
+function renderTable() {
+  const tbody = document.getElementById('progressBody');
+  tbody.innerHTML = T3_DATA.map(prod => {
+    const t3adj = prod.t3_adjusted || 0;
+    let current, pct_adj, gap, blend, vsT3, custCount, displayT3Adj;
+
+    if (currentRep === 'ALL') {
+      current      = prod.current_volume;
+      pct_adj      = prod.pct_to_t3_adj;
+      gap          = prod.gap_units;
+      blend        = prod.blended_price;
+      vsT3         = prod.blended_vs_t3;
+      custCount    = null;
+      displayT3Adj = t3adj;
+    } else {
+      const row      = (REP_DATA[currentRep] || {})[prod.vol_key];
+      const totalVol = prod.current_volume || 1;
+      if (!row) {
+        current = 0; pct_adj = 0; gap = 0; blend = null; vsT3 = null; custCount = 0;
+        displayT3Adj = 0;
+      } else {
+        current      = row.rep_volume;
+        // Proportional T3 Adj: rep's fair share based on their volume vs company total
+        displayT3Adj = Math.round(t3adj * current / totalVol);
+        pct_adj      = displayT3Adj > 0 ? Math.round(current / displayT3Adj * 1000) / 10 : null;
+        gap          = displayT3Adj - current;
+        blend        = row.blended_price;
+        vsT3         = blend != null ? Math.round((blend - prod.t3_unit_price_avg) * 100) / 100 : null;
+        custCount    = row.customer_count;
+      }
+    }
+
+    const sc   = statusClass(pct_adj);
+    const barW = Math.min(pct_adj || 0, 100);
+    const custHtml = custCount != null ? `<span class="cust-badge">${custCount} cust</span>` : '';
+    const repAgr   = currentRep !== 'ALL' ? ((AGREEMENTS[currentRep] || {})[prod.vol_key] || []) : [];
+    const agrHtml  = repAgr.length ? `<span class="agr-badge">${repAgr.length} agr</span>` : '';
+    const gapHtml  = gap <= 0
+      ? `<span class="badge badge-success">${fmt(Math.abs(gap))} ahead</span>`
+      : `<span class="muted">${fmt(gap)}</span>`;
+    const vsHtml = vsT3 == null ? '<span class="muted">—</span>'
+      : vsT3 >= 0
+        ? `<span class="pos">+R${vsT3.toFixed(2)}</span>`
+        : `<span class="neg">R${vsT3.toFixed(2)}</span>`;
+    const blendHtml  = blend != null ? 'R' + blend.toFixed(2) : '<span class="muted">—</span>';
+    const avePriceHtml = prod.t3_unit_price_avg != null ? 'R' + (+prod.t3_unit_price_avg).toFixed(2) : '<span class="muted">—</span>';
+
+    return `<tr>
+      <td class="td-key">${prod.vol_key}</td>
+      <td class="td-num">${fmt(current)}${custHtml}${agrHtml}</td>
+      <td class="td-num">${fmt(displayT3Adj)}</td>
+      <td class="td-bar">
+        <div class="bar-wrap"><div class="bar-fill bar-${sc}" style="width:${barW}%"></div></div>
+        <span class="bar-pct ${sc}-text">${pct_adj != null ? pct_adj.toFixed(1) + '%' : '—'}</span>
+      </td>
+      <td class="td-num">${gapHtml}</td>
+      <td class="td-num td-muted">${fmt(prod.peak_t3)}</td>
+      <td class="td-num td-muted">${avePriceHtml}</td>
+      <td class="td-num">${blendHtml}</td>
+      <td class="td-num">${vsHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filterRep(rep) {
+  currentRep = rep;
+  document.querySelectorAll('.rep-btn').forEach(b => b.classList.toggle('active', b.dataset.rep === rep));
+  document.getElementById('filterSubtitle').textContent =
+    rep === 'ALL' ? 'All reps — total business' : `${rep} — ${REP_NAMES[rep] || rep}`;
+  document.getElementById('t3adjHeader').textContent =
+    rep === 'ALL' ? 'T3 Adj' : 'T3 Adj (rep)';
+  renderTable();
+  renderAgreements(rep);
+}
+
+function renderAgreements(rep) {
+  const panel = document.getElementById('agrPanel');
+  const tbody = document.getElementById('agrBody');
+  const sub   = document.getElementById('agrPanelSub');
+
+  if (rep === 'ALL') { panel.classList.remove('show'); return; }
+
+  const T3_MAP = {};
+  T3_DATA.forEach(r => { T3_MAP[r.vol_key] = r; });
+
+  const repAgrs = AGREEMENTS[rep] || {};
+  const allRows = [];
+  Object.entries(repAgrs).forEach(([vk, agrs]) => {
+    agrs.forEach(a => allRows.push({...a, vol_key: vk}));
+  });
+
+  panel.classList.add('show');
+
+  if (!allRows.length) {
+    sub.textContent = 'none on file';
+    tbody.innerHTML = `<tr><td colspan="7" class="agr-empty">No active rebate agreements for ${rep} — ${REP_NAMES[rep] || rep}.</td></tr>`;
+    return;
+  }
+
+  sub.textContent = `${allRows.length} active`;
+
+  // Sort by vol_key then customer name
+  allRows.sort((a, b) => a.vol_key.localeCompare(b.vol_key) || a.customer_name.localeCompare(b.customer_name));
+
+  tbody.innerHTML = allRows.map(a => {
+    const t3price = T3_MAP[a.vol_key]?.t3_unit_price_avg;
+    const t3Html  = t3price != null ? 'R' + (+t3price).toFixed(2) : '<span class="muted">—</span>';
+    const diff    = t3price != null && a.agreed_price != null ? (+a.agreed_price) - (+t3price) : null;
+    const priceCls = diff == null ? '' : diff < 0 ? 'neg' : 'pos';
+    const rebate  = a.rebate_amount != null
+      ? (a.rebate_type === 'per_unit' ? `R${(+a.rebate_amount).toFixed(2)}/unit` : `R${(+a.rebate_amount).toFixed(2)} fixed`)
+      : '—';
+    const startFmt = a.start_date ? new Date(a.start_date + 'T12:00:00').toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const endFmt   = a.end_date   ? new Date(a.end_date   + 'T12:00:00').toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    return `<tr>
+      <td>
+        <div style="font-weight:600">${escHtml(a.customer_name)}</div>
+        <div class="muted" style="font-size:11px">${escHtml(a.account_no)}</div>
+      </td>
+      <td>${escHtml(a.vol_key)}</td>
+      <td class="td-num">${a.target_volume != null ? (+a.target_volume).toLocaleString('en-ZA') : '—'}</td>
+      <td class="td-num ${priceCls}">${a.agreed_price != null ? 'R' + (+a.agreed_price).toFixed(2) : '—'}</td>
+      <td class="td-num">${t3Html}</td>
+      <td>${escHtml(rebate)}</td>
+      <td><span class="muted" style="font-size:12px">${startFmt} → ${endFmt}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderRepCards() {
+  const T3_MAP = {};
+  T3_DATA.forEach(r => { T3_MAP[r.vol_key] = r; });
+  document.getElementById('repCards').innerHTML = Object.keys(REP_DATA).sort().map(rep => {
+    const rows  = Object.values(REP_DATA[rep] || {});
+    const total = rows.reduce((s, r) => s + r.rep_volume, 0);
+    const top5  = [...rows].sort((a, b) => b.rep_volume - a.rep_volume).slice(0, 5);
+    const prodRows = top5.map(r => {
+      const t3  = T3_MAP[r.vol_key];
+      const adj = t3 ? t3.t3_adjusted : 0;
+      const pct = adj ? Math.round(r.rep_volume / adj * 1000) / 10 : 0;
+      const sc  = statusClass(pct);
+      const bl  = r.blended_price != null ? 'R' + r.blended_price.toFixed(2) : '—';
+      return `<tr>
+        <td>${r.vol_key}</td>
+        <td class="td-num">${fmt(r.rep_volume)}</td>
+        <td><span class="badge badge-${sc}">${pct.toFixed(1)}%</span></td>
+        <td class="td-num muted">${r.customer_count} cust</td>
+        <td class="td-num">${bl}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="rep-card">
+      <div class="rep-card-header">
+        <div class="rep-code">${rep}</div>
+        <div>
+          <div class="rep-name">${REP_NAMES[rep] || rep}</div>
+          <div class="rep-total">${fmt(total)} units — trailing 90 days</div>
+        </div>
+      </div>
+      <table class="rep-table">
+        <thead><tr><th>Product</th><th class="r">Units</th><th>% Adj T3</th><th class="r">Customers</th><th class="r">Ave Price</th></tr></thead>
+        <tbody>${prodRows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
+}
+
+renderTable();
+renderRepCards();
+</script>
+</body>
+</html>
