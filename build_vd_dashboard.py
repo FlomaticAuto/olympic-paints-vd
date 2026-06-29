@@ -20,7 +20,7 @@ import sys, re, json, datetime
 from pathlib import Path
 import pandas as pd
 
-ONE = r"C:\Users\Administrator\OneDrive\1.Projects\1.Olympic Paints"
+ONE = r"C:\Users\quint\OneDrive\1.Projects\1.Olympic Paints"
 PARQUET = Path(ONE) / "3.Resources" / "16.Sales and Other data" / "Sales_Invoices_All.parquet"
 XLSX    = Path(ONE) / "2.Areas" / "1. Sales" / "New Sales Targets and Pricing" / "Quantity Targets.xlsx"
 HTML    = Path(__file__).resolve().parent / "dashboard" / "index.html"
@@ -66,12 +66,14 @@ def categorize(pn):
     pn = pn.upper(); sz = size_of(pn)
     wb = bool(re.search(r'\bWHITE\b|\bBLACK\b', pn)); wc = bool(re.search(r'\bWHITE\b|\bCREAM\b', pn))
     if 'HIGH GLOSS' in pn:
-        if sz not in ('1L','5L'): return None
-        return f"High Gloss {'White/Black' if wb else 'Colours'} {sz}"
+        if sz not in ('1L','5L'): return None  # 500ml and 20L not in VD programme
+        # CREAM and IVORY share the White/Black tier (similar neutral price point)
+        wb_ext = bool(re.search(r'\bWHITE\b|\bBLACK\b|\bCREAM\b|\bIVORY\b', pn))
+        return f"High Gloss {'White/Black' if wb_ext else 'Colours'} {sz}"
     if re.search(r'Q\.?\s*D\b', pn):
         if sz not in ('1L','5L') or wb: return None
         return f"QD Enamel Colours {sz}"
-    if 'DECOR' in pn:
+    if 'DECOR' in pn and 'MASTER' not in pn:
         if sz not in ('20L','5L'): return None
         return f"Decor {'White/Cream' if wc else 'Colours'} {sz}"
     if 'VARNISH' in pn:
@@ -80,9 +82,10 @@ def categorize(pn):
     if 'ROOF' in pn and ('UNIVERSAL' in pn or 'UNIV' in pn):
         if sz not in ('20L','5L'): return None
         return f"Universal Roof {sz}"
-    if 'THINNER' in pn:
-        if sz == '5L':   return "Thinner 5L"
-        if sz == '750ML':return "Thinner 750ml"
+    if 'THINNER' in pn:  # catches THINNER and THINNERS
+        if sz == '5L':    return "Thinner 5L"
+        if sz == '750ML': return "Thinner 750ml"
+        if '12X' in pn:   return "Thinner 750ml"
     return None
 
 def month_targets(month_name):
