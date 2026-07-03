@@ -1,26 +1,30 @@
 #!/usr/bin/env python3
 """
-Generate the VD Rebate dashboard data (index.html) for the CURRENT month.
+Generate the VD Rebate dashboard data (index.html) with a per-MONTH history so the
+page can switch between months and view each one separately.
 
-- Actuals: Sales_Invoices_All.parquet, current calendar month, ivqty>0.
-- Targets: "Quantity Targets.xlsx" -> "Qty Targets" sheet -> the column whose
-  header matches the current month name (seasonally-adjusted monthly requirement
-  per product/size). Each size-line target is split across its colour groups by
-  the ACTUAL sales mix for the month (falls back to the T3 tier mix if a line
-  has no sales yet).
+- Actuals: Sales_Invoices_All.parquet, ivqty>0. One data block is built for EVERY
+  (year, month) present in the parquet, up to the cutoff month (today, or the
+  override passed on the command line).
+- Targets: "Quantity Targets.xlsx" -> "Qty Targets" sheet -> the column whose header
+  matches the month name (seasonally-adjusted monthly requirement per product/size).
+  Each size-line target is split across its colour groups by the ACTUAL sales mix for
+  that month (falls back to the T3 tier mix if a line has no sales). The seasonal
+  plan is the current one; it is applied to each month as a consistent yardstick.
 - Reps: AC/AP/BM/BV/NP are named; every other smref (incl. blank) -> "Internal".
-  Company totals == sum of the 6 buckets (exact reconciliation).
-- Injects T3_DATA / REP_DATA / REP_NAMES / VD_CONFIG into dashboard/index.html.
-  KPIs, rep buttons and month labels are computed client-side from that data.
+  Company totals == sum of the 6 buckets (exact reconciliation, asserted per month).
+- Injects ALL_MONTHS / MONTH_KEYS / CURRENT_KEY / REP_NAMES into dashboard/index.html.
+  KPIs, rep buttons, month selector and labels are all computed client-side.
 
-Run:  python build_vd_dashboard.py            (current month, today's date)
-      python build_vd_dashboard.py 2026 6      (override year month, for testing)
+Run:  python build_vd_dashboard.py            (all months up to the current month)
+      python build_vd_dashboard.py 2026 6      (override cutoff month, for testing)
 """
 import sys, re, json, datetime
+from functools import lru_cache
 from pathlib import Path
 import pandas as pd
 
-ONE = r"C:\Users\quint\OneDrive\1.Projects\1.Olympic Paints"
+ONE = str(Path.home() / "OneDrive" / "1.Projects" / "1.Olympic Paints")  # machine-agnostic (Administrator / quint)
 PARQUET = Path(ONE) / "3.Resources" / "16.Sales and Other data" / "Sales_Invoices_All.parquet"
 XLSX    = Path(ONE) / "2.Areas" / "1. Sales" / "New Sales Targets and Pricing" / "Quantity Targets.xlsx"
 HTML    = Path(__file__).resolve().parent / "dashboard" / "index.html"
@@ -88,6 +92,7 @@ def categorize(pn):
         if '12X' in pn:   return "Thinner 750ml"
     return None
 
+@lru_cache(maxsize=None)
 def month_targets(month_name):
     """Read the Qty Targets sheet and return {size_line: monthly_qty} for the month."""
     d = pd.read_excel(XLSX, sheet_name="Qty Targets", header=None)
@@ -110,29 +115,18 @@ def month_targets(month_name):
         out[line] = float(v) if v is not None and not pd.isna(v) else 0.0
     return out
 
-def main():
-    today = datetime.date.today()
-    if len(sys.argv) == 3:
-        year, month = int(sys.argv[1]), int(sys.argv[2])
-    else:
-        year, month = today.year, today.month
+def compute_month(df, year, month, today):
+    """Build the {t3, rep, config} data block for one (year, month)."""
     month_name = MONTHS[month-1]
-
-    df = pd.read_parquet(PARQUET)
-    df = df[df.ivqty > 0].copy()
-    df['rep'] = df.smref.where(df.smref.isin(NAMED), 'Internal')
     cur = df[(df.year == year) & (df.month == month)].copy()
     cur['vk'] = cur.prodname.map(categorize)
     ins = cur[cur.vk.notna()].copy()
 
     line_tgt = month_targets(month_name)
-    # actual qty per group and per size-line
     grp = ins.groupby('vk').agg(q=('ivqty','sum'), nett=('ivnett','sum')).to_dict('index')
-    line_q = {}
+    line_q, line_tier = {}, {}
     for vk, (ln, tq, pr) in TIER.items():
-        line_q[ln] = line_q.get(ln, 0) + (grp.get(vk, {}).get('q', 0) or 0)
-    line_tier = {}
-    for vk, (ln, tq, pr) in TIER.items():
+        line_q[ln]    = line_q.get(ln, 0) + (grp.get(vk, {}).get('q', 0) or 0)
         line_tier[ln] = line_tier.get(ln, 0) + tq
 
     rows = []
@@ -140,10 +134,7 @@ def main():
         ln, tq, price = TIER[vk]
         g = grp.get(vk, {}); curv = int(round(g.get('q', 0) or 0))
         # split month line-target across colour groups by ACTUAL mix; fallback to tier mix
-        if line_q[ln] > 0:
-            share = (g.get('q', 0) or 0) / line_q[ln]
-        else:
-            share = tq / line_tier[ln]
+        share = (g.get('q', 0) or 0) / line_q[ln] if line_q[ln] > 0 else tq / line_tier[ln]
         tgt = round(line_tgt.get(ln, 0) * share)
         bl = round(g['nett']/g['q'], 2) if g.get('q') else 0
         pct = round(curv/tgt*1000)/10 if tgt > 0 else None
@@ -161,26 +152,62 @@ def main():
             customer_count=int(x.cust), blended_price=round(x.nett/x.v, 2))
             for vk, x in g.iterrows()}
 
+    is_current = (year == today.year and month == today.month)
+    config = {"snapshot_date": today.isoformat(), "month_name": month_name,
+              "year": year, "month": month, "key": f"{year}-{month:02d}",
+              "is_current": is_current}
+
+    total  = sum(r['current_volume'] for r in rows)
+    repsum = sum(sum(v['rep_volume'] for v in rep_data[rep].values()) for rep in rep_data)
+    assert repsum == total, f"reconcile fail {year}-{month:02d}: {repsum} != {total}"
+    return {"t3": rows, "rep": rep_data, "config": config}, total
+
+def main():
+    today = datetime.date.today()
+    if len(sys.argv) == 3:
+        cy, cm = int(sys.argv[1]), int(sys.argv[2])
+    else:
+        cy, cm = today.year, today.month
+    cutoff = (cy, cm)
+    current_key = f"{cy}-{cm:02d}"
+
+    df = pd.read_parquet(PARQUET)
+    df = df[df.ivqty > 0].copy()
+    df['rep'] = df.smref.where(df.smref.isin(NAMED), 'Internal')
+
+    # every (year, month) with data, up to the cutoff month, newest first
+    yms = sorted({(int(y), int(m)) for y, m in zip(df.year, df.month) if (int(y), int(m)) <= cutoff},
+                 reverse=True)
+
+    all_months, keys_desc, totals = {}, [], {}
+    for (y, m) in yms:
+        data, total = compute_month(df, y, m, today)
+        key = data["config"]["key"]
+        all_months[key] = data
+        keys_desc.append(key)
+        totals[key] = total
+
+    if current_key not in all_months and keys_desc:
+        current_key = keys_desc[0]
+
     names = {"AC":"Aboo Cassim","AP":"Amit Patel","BM":"Byron Minnie",
              "BV":"Bhadresh Vallabh","NP":"Nikhil Panchal","Internal":"Internal"}
-    config = {"snapshot_date": today.isoformat(), "month_name": month_name}
 
     # ── inject ──
     html = HTML.read_text(encoding="utf-8")
     j = lambda o: json.dumps(o, separators=(',', ':'), ensure_ascii=False)
-    html = re.sub(r'const T3_DATA    = \[.*?\];', 'const T3_DATA    = '+j(rows)+';', html, count=1, flags=re.S)
-    html = re.sub(r'const REP_DATA   = \{.*?\};\nconst REP_NAMES',
-                  'const REP_DATA   = '+j(rep_data)+';\nconst REP_NAMES', html, count=1, flags=re.S)
+    html = re.sub(r'const ALL_MONTHS = \{.*?\};\nconst MONTH_KEYS',
+                  'const ALL_MONTHS = '+j(all_months)+';\nconst MONTH_KEYS', html, count=1, flags=re.S)
+    html = re.sub(r'const MONTH_KEYS = \[.*?\];\nconst CURRENT_KEY',
+                  'const MONTH_KEYS = '+j(keys_desc)+';\nconst CURRENT_KEY', html, count=1, flags=re.S)
+    html = re.sub(r'const CURRENT_KEY = ".*?";\nconst REP_NAMES',
+                  'const CURRENT_KEY = '+j(current_key)+';\nconst REP_NAMES', html, count=1, flags=re.S)
     html = re.sub(r'const REP_NAMES  = \{.*?\};', 'const REP_NAMES  = '+j(names)+';', html, count=1, flags=re.S)
-    html = re.sub(r'const VD_CONFIG  = \{.*?\};', 'const VD_CONFIG  = '+j(config)+';', html, count=1, flags=re.S)
     HTML.write_text(html, encoding="utf-8")
 
-    total = sum(r['current_volume'] for r in rows)
-    repsum = {rep: sum(v['rep_volume'] for v in rep_data[rep].values()) for rep in rep_data}
-    assert sum(repsum.values()) == total, f"reconcile fail {sum(repsum.values())} != {total}"
-    print(f"VD dashboard rebuilt for {month_name} {year} ({today.isoformat()})")
-    print(f"  groups={len(rows)}  total={total}  target_sum={sum(r['t3_adjusted'] for r in rows)}")
-    print(f"  reps={repsum}  (reconciles)")
+    print(f"VD dashboard rebuilt: {len(all_months)} months, current={current_key} ({today.isoformat()})")
+    for k in keys_desc:
+        print(f"  {k}: total={totals[k]}")
 
 if __name__ == "__main__":
     main()
